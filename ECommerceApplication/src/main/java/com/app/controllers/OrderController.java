@@ -18,8 +18,10 @@ import com.app.config.AppConstants;
 import com.app.payloads.OrderDTO;
 import com.app.payloads.OrderResponse;
 import com.app.services.OrderService;
+import com.app.payloads.PaymentInfoDTO;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api")
@@ -30,8 +32,8 @@ public class OrderController {
 	public OrderService orderService;
 	
 	@PostMapping("/public/users/{email}/carts/{cartId}/payments/credit-card/order")
-	public ResponseEntity<OrderDTO> orderProducts(@PathVariable String email, @PathVariable Long cartId, @RequestBody String cardNumber, @RequestBody String cvc) {
-		OrderDTO order = orderService.placeOrder(email, cartId, cardNumber, cvc);
+	public ResponseEntity<OrderDTO> orderProducts(@PathVariable String email, @PathVariable Long cartId,@Valid @RequestBody PaymentInfoDTO paymentInfo) {
+		OrderDTO order = orderService.placeOrder(email, cartId, paymentInfo);
 		
 		return new ResponseEntity<OrderDTO>(order, HttpStatus.CREATED);
 	}
